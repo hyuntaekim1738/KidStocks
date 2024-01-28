@@ -1,7 +1,13 @@
-import React from 'react';
-import { View, ImageBackground, StyleSheet, Image } from 'react-native';
+import {useState} from 'react';
+import Shack from './Shack.js';
+import { View, ImageBackground, StyleSheet, Image, Touchable, Modal, Text } from 'react-native';
+//npx expo start
+const Home = ({ onShackPress }) => {
+  const [isModalVisible, setModalVisible] = useState(false);
 
-const Home = () => {
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -22,10 +28,12 @@ const Home = () => {
           source={require('../assets/HCKTREE 1.png')}
           style={styles.aboveBottomImage}
         />
-        <Image
-          source={require('../assets/HCKSHACK 1.png')}
-          style={styles.rightOfAboveBottomImage}
-        />
+        <Touchable onPress={onShackPress}>
+          <Image
+            source={require('../assets/HCKSHACK 1.png')}
+            style={styles.rightOfAboveBottomImage}
+          />
+        </Touchable>
         <Image
           source={require('../assets/image 6.png')}
           style={styles.aboveLeftOfTopLeftImage}
@@ -40,6 +48,21 @@ const Home = () => {
         />
         {/* Your other components or content */}
       </ImageBackground>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => {
+          setModalVisible(!isModalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            {/* Conditionally render the Shack component */}
+            {isModalVisible && <Shack onClose={toggleModal} />}
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -73,7 +96,7 @@ const styles = StyleSheet.create({
   },
   rightOfAboveBottomImage: {
     position: 'absolute',
-    bottom: 75, // Adjust the bottom position as needed
+    bottom: -350, // Adjust the bottom position as needed
     right: 7, // Adjust the right position as needed
   },
   treeBird: {
